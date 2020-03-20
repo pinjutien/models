@@ -1,0 +1,14 @@
+.DS_Store
+.ipynb_checkpoints/
+*~
+*.pyc
+*.pkl
+*.log
+*.csv
+*log-temp/
+*.tex
+*.aux
+*.out
+*.gz
+auto/
+*#

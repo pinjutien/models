@@ -88,6 +88,9 @@ class LinearFullPosteriorSampling(BanditAlgorithm):
       return self.t % self.hparams.num_actions
 
     # Sample sigma2, and beta conditional on sigma2
+    # https://en.wikipedia.org/wiki/Inverse-gamma_distribution
+    # If X ~ inv-gamma(a, b), then k*X ~ inv-gamma(a, k*b)
+    # k = 1/b
     sigma2_s = [
         self.b[i] * invgamma.rvs(self.a[i])
         for i in range(self.hparams.num_actions)

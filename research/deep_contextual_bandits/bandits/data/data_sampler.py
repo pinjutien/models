@@ -69,24 +69,24 @@ def sample_mushroom_data(file_name,
       [r_eat_poison_bad, r_eat_poison_good],
       p=[prob_poison_bad, 1 - prob_poison_bad],
       size=num_contexts)
-  eat_reward = r_eat_safe * df.iloc[ind, 0]
-  eat_reward += np.multiply(random_poison, df.iloc[ind, 1])
+  eat_reward = np.array(r_eat_safe * df.iloc[ind, 0].values, dtype=np.int)
+  eat_reward += np.multiply(random_poison, df.iloc[ind, 1].values)
   eat_reward = eat_reward.reshape((num_contexts, 1))
 
   # compute optimal expected reward and optimal actions
   exp_eat_poison_reward = r_eat_poison_bad * prob_poison_bad
   exp_eat_poison_reward += r_eat_poison_good * (1 - prob_poison_bad)
-  opt_exp_reward = r_eat_safe * df.iloc[ind, 0] + max(
-      r_noeat, exp_eat_poison_reward) * df.iloc[ind, 1]
+  opt_exp_reward = r_eat_safe * df.iloc[ind, 0].values + max(
+      r_noeat, exp_eat_poison_reward) * df.iloc[ind, 1].values
 
   if r_noeat > exp_eat_poison_reward:
     # actions: no eat = 0 ; eat = 1
-    opt_actions = df.iloc[ind, 0]  # indicator of edible
+    opt_actions = df.iloc[ind, 0].values  # indicator of edible
   else:
     # should always eat (higher expected reward)
     opt_actions = np.ones((num_contexts, 1))
 
-  opt_vals = (opt_exp_reward.values, opt_actions.values)
+  opt_vals = (opt_exp_reward, opt_actions)
 
   return np.hstack((contexts, no_eat_reward, eat_reward)), opt_vals
 
